@@ -5,7 +5,7 @@ class Node:
     def __init__(self, name):
         self.parent = self
         self.name = name
-        self.num_of_friends = 1
+        self.amount_of_net = 1
         self.rank = 0
 
 
@@ -25,18 +25,18 @@ def union(people, name1, name2):
     p2_root = find(p2)
 
     if p1_root == p2_root:
-        return p1_root.num_of_friends
+        return p1_root.amount_of_net
 
     if p1_root.rank > p2_root.rank:
         p2_root.parent = p1_root
-        p1_root.num_of_friends += p2_root.num_of_friends
-        return p1_root.num_of_friends
+        p1_root.amount_of_net += p2_root.amount_of_net
+        return p1_root.amount_of_net
     else:
         p1_root.parent = p2_root
-        p2_root.num_of_friends += p1_root.num_of_friends
+        p2_root.amount_of_net += p1_root.amount_of_net
         if p1_root.rank == p2_root.rank:
             p2_root.rank += 1
-        return p2_root.num_of_friends
+        return p2_root.amount_of_net
 
 
 NUM_OF_TESTS = int(stdin.readline().split()[0])
