@@ -1,52 +1,55 @@
 from sys import stdin
 
 
-class Node:
-    def __init__(self, name):
-        self.parent = self
-        self.name = name
-        self.amount_of_net = 1
-        self.rank = 0
-
-
-def find(p):
-    x = p
-    while x != x.parent:
-        x = p.parent
-    p.parent = x
+def find(parent, name):
+    x = name
+    while parent[x] != x:
+        x = parent[x]
+    parent[name] = x
     return x
 
 
-def union(people, name1, name2):
-    p1 = people.setdefault(name1, Node(name=name1))
-    p2 = people.setdefault(name2, Node(name=name2))
+def union(parent, size_of_net, rank, name1, name2):
+    p1 = parent.get(name1)
+    if not p1:
+        parent[name1] = name1
+        size_of_net[name1] = 1
+        rank[name1] = 0
 
-    p1_root = find(p1)
-    p2_root = find(p2)
+    p2 = parent.get(name2)
+    if not p2:
+        parent[name2] = name2
+        size_of_net[name2] = 1
+        rank[name2] = 0
+
+    p1_root = find(parent, name1)
+    p2_root = find(parent, name2)
 
     if p1_root == p2_root:
-        return p1_root.amount_of_net
+        return size_of_net[p1_root]
 
-    if p1_root.rank > p2_root.rank:
-        p2_root.parent = p1_root
-        p1_root.amount_of_net += p2_root.amount_of_net
-        return p1_root.amount_of_net
+    if rank[p1_root] > rank[p2_root]:
+        parent[p2_root] = p1_root
+        size_of_net[p1_root] += size_of_net[p2_root]
+        return size_of_net[p1_root]
     else:
-        p1_root.parent = p2_root
-        p2_root.amount_of_net += p1_root.amount_of_net
-        if p1_root.rank == p2_root.rank:
-            p2_root.rank += 1
-        return p2_root.amount_of_net
+        parent[p1_root] = p2_root
+        size_of_net[p2_root] += size_of_net[p1_root]
+        if rank[p1_root] == rank[p2_root]:
+            rank[p2_root] += 1
+        return size_of_net[p2_root]
 
 
 NUM_OF_TESTS = int(stdin.readline().split()[0])
 results = []
 for _ in range(NUM_OF_TESTS):
     N = int(stdin.readline().split()[0])
-    people = {}
+    parent = {}
+    size_of_net = {}
+    rank = {}
     for _ in range(N):
         name1, name2 = stdin.readline().split()
-        results.append(union(people, name1, name2))
+        results.append(union(parent, size_of_net, rank, name1, name2))
 
 for r in results:
     print(r)
