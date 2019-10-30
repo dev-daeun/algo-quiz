@@ -25,16 +25,16 @@ def find_by_k(k):
         if perm_amount < k:
             k -= perm_amount
             pivot += 1
-        elif perm_amount > k:
+        else:
             answer.append(pivot)
             numbers.remove(pivot)
+            if not numbers:
+                return answer
             numbers = sorted(numbers)
             pivot = numbers[0]
             sub += 1
             perm_amount = factorial(N-sub)
-        else:
-            answer.extend(numbers)
-            return answer
+
 
 if op == 1:
     p = find_by_k(inputs[0])
