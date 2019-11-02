@@ -1,22 +1,11 @@
 from sys import stdin
 
 
-def find_kth(arr, k):
-    while True:
-        mid = len(arr) // 2
-        if mid < k:
-            k -= mid
-            arr = arr[mid:]
-        elif mid > k:
-            arr = arr[:mid]
-        else:
-            return arr[k-1]
-
-
 N, k = list(map(lambda x: int(x), stdin.readline().split()))
 nums = list(map(lambda x: int(x), stdin.readline().split()))
 
 nums = sorted(nums)
-answer = find_kth(nums, k)
-print(answer)
+
+# 배열의 정렬이 필요할 때는 그냥 python의 built-in 함수를 쓰자.
+print(nums[k-1])
 
