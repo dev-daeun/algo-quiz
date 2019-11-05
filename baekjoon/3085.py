@@ -1,8 +1,10 @@
 from sys import stdin
 
+# 모든 칸들을 순회하면서 교환 결과를 비교한다.
+# 교환 결과: 무조건 1번의 교환이 발생해야 하므로, 교환이 발생하고 난 뒤에 변경되는 행과 열로부터 구한 최대 사탕 갯수.
+# calculate_max()에서 최대 사탕 갯수를 구하는 로직에 오류가 있어서 시간 다소 소요.
 
 table = []
-
 N = int(stdin.readline())
 for _ in range(N):
     row = list(stdin.readline().strip('\n'))
@@ -59,8 +61,8 @@ for i in range(N):
             c = calculate_max(column2)
 
             answer = max(answer, a, b, c)
-            init_counter()
 
+            # 딱 1번의 교환만 가정하므로 원복시킨다.
             table[i][j], table[i][j+1] = table[i][j+1], table[i][j]
 
 
@@ -83,6 +85,8 @@ for i in range(N):
             init_counter()
 
             answer = max(answer, a, b, c)
+
+            # 딱 1번의 교환만 가정하므로 원복시킨다.
             table[i][j], table[i+1][j] = table[i+1][j], table[i][j]
 
 print(answer)
