@@ -19,17 +19,15 @@ counter = {
 
 def calculate_max(line):
     cur = line[0]
-    for candy in line:
-        if candy == cur:
-            counter[cur] += 1
+    counts = [1]
+    for i in range(1, N):
+        candy = line[i]
+        if cur == candy:
+            counts[-1] += 1
         else:
-            counter[cur] = 0
-            counter[candy] += 1
+            counts.append(1)
         cur = candy
-    global answer
-    nomi = [counter[key] for key in counter]
-    return max(nomi)
-
+    return max(counts)
 
 def init_counter():
     for key in counter:
