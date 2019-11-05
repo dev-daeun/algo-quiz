@@ -28,44 +28,63 @@ def calculate_max(line):
         cur = candy
     global answer
     nomi = [counter[key] for key in counter]
-    nomi.append(answer)
-    answer = max(nomi)
+    return max(nomi)
+
+
+def init_counter():
+    for key in counter:
+        counter[key] = 0
+
+
+def create_column(n):
+    column = []
+    for r in range(N):
+        column.append(table[r][n])
+    return column
 
 
 # 가로 교환
 for i in range(N):
     for j in range(N):
         if 0 <= j <= N-2:
-            if table[i][j] != table[i][j+1]:
-                table[i][j], table[i][j+1] = table[i][j+1], table[i][j]
+            table[i][j], table[i][j+1] = table[i][j+1], table[i][j]
 
-                for row in table:
-                    calculate_max(row)
+            row = table[i]
+            a = calculate_max(row)
+            init_counter()
 
-                for l in range(N):
-                    column = []
-                    for r in range(N):
-                        column.append(table[r][l])
-                    calculate_max(column)
+            column1 = create_column(j)
+            b = calculate_max(column1)
+            init_counter()
 
-                table[i][j], table[i][j+1] = table[i][j+1], table[i][j]
+            column2 = create_column(j+1)
+            c = calculate_max(column2)
+
+            answer = max(answer, a, b, c)
+            init_counter()
+
+            table[i][j], table[i][j+1] = table[i][j+1], table[i][j]
+
 
 # 세로 교환
 for i in range(N):
     for j in range(N):
         if 0 <= i <= N-2:
-            if table[i][j] != table[i+1][j]:
-                table[i][j], table[i+1][j] = table[i+1][j], table[i][j]
+            table[i][j], table[i+1][j] = table[i+1][j], table[i][j]
 
-                for row in table:
-                    calculate_max(row)
+            row1 = table[i]
+            a = calculate_max(row1)
+            init_counter()
 
-                for l in range(N):
-                    column = []
-                    for r in range(N):
-                        column.append(table[r][l])
-                    calculate_max(column)
+            row2 = table[i+1]
+            b = calculate_max(row2)
+            init_counter()
 
-                table[i][j], table[i+1][j] = table[i+1][j], table[i][j]
+            column = create_column(j)
+            c = calculate_max(column)
+            init_counter()
+
+            answer = max(answer, a, b, c)
+            table[i][j], table[i+1][j] = table[i+1][j], table[i][j]
 
 print(answer)
