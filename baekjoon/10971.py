@@ -31,3 +31,6 @@ for p in perms:
 
 answer = min(nominates)
 print(answer)
+
+# 시간복잡도 : N * N!
+# 제출할 때 언어 선택을 python3으로 하면 시간초과나고 pypy로 하면 통과됨...뭐야...
