@@ -1,6 +1,4 @@
 from sys import stdin
-import pprint
-
 
 N, M = list(map(int, stdin.readline().split()))
 P = list()
@@ -10,63 +8,51 @@ for _ in range(N):
 
 
 def calculate_width_sum(width_set):
-    width_pieces = [list() for _ in range(N)]
-
-    for n in range(N*M):
-        if n & width_set:
-            share = n // M
-            rest = n % M
-            width_pieces[share].append(P[share][rest])
-
-    pp = pprint.PrettyPrinter(indent=2)
-    
-    pieces = list()
-    for nums in width_pieces:
-        if nums:
-            pieces.append(int(''.join(nums)))
-
-    pp.pprint(f'width: {pieces}')
-
-    return sum(pieces)
+    total_sum = 0
+    for i in range(N):
+        cur_sum = 0
+        exp = 0
+        for j in range(M-1, -1, -1):
+            n = i * M + j
+            if (1 << n) & width_set:
+                cur_sum += pow(10, exp) * int(P[i][j])
+                exp += 1
+            else:
+                total_sum += cur_sum
+                exp = 0
+                cur_sum = 0
+        total_sum += cur_sum
+    return total_sum
 
 
 def calculate_height_sum(height_set):
-    height_pieces = [list() for _ in range(M)]
-
-    for n in range(N*M):
-        if n & height_set:
-            share = n // M
-            rest = n % M
-            height_pieces[rest].append(P[share][rest])
-    
     total_sum = 0
-    for li in height_pieces:
-        total_sum += sum(list(map(int, li)))
-    
-    if total_sum == 0:
-        return 0
-    
-    pp = pprint.PrettyPrinter(indent=2)
-
-    pieces = list()
-    for nums in height_pieces:
-        if nums:
-            pieces.append(int(''.join(nums)))
-
-    pp.pprint(f'height: {pieces}')
-    return sum(pieces)
+    for j in range(M):
+        cur_sum = 0
+        exp = 0
+        for i in range(N-1, -1, -1):
+            n = i * M + j
+            if (1 << n) & height_set:
+                cur_sum += pow(10, exp) * int(P[i][j])
+                exp += 1
+            else:
+                total_sum += cur_sum
+                exp = 0
+                cur_sum = 0
+        total_sum += cur_sum
+    return total_sum
 
 
 def get_answer():
-    U = (1 << (N * M)) - 1
     answer = 0
+    u = (1 << (N * M)) - 1
     for width_set in range(1 << (N * M)):
-        height_set = U - width_set
-        
-        print('--------------------')
+        height_set = u - width_set
         width_sum = calculate_width_sum(width_set)
         height_sum = calculate_height_sum(height_set)
         answer = max(answer, width_sum + height_sum)
+
     return answer
+
 
 print(get_answer())
