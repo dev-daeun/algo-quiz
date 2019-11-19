@@ -9,30 +9,39 @@ is_binary_graph():
 DFS를 사용해서 어떤 정점을 방문하고나서는, 그 정점과 연결된 다른 정점들은 다른 집합에 있다고 간주한다.
 어떤 정점과 연결된 다른 정점을 방문했을 때 두 정점이 같은 집합에 있으면 이분 그래프가 아니므로 False 리턴.
 아니면 True 리턴.
+
+하나의 정점과 연결된 다른 정점들의 각 방문 여부를 체크해서 리스트에 따로 저장하고 리스트를 검사했을 때 시간 초과가 났음.
+항상 각 정점의 인접리스트를 끝까지 순회하였으므로 dfs의 시간복잡도 = 항상 O(전체 간선의 개수)
+
+인접 리스트를 순회하면서 가장 먼저 발견한 미방문 정점을 무조건 스택에 저장 후 for문을 break하도록 변경 후 통과.
 '''
-def is_binary_graph(V, i, status, adjacent_list):
+
+
+# 재귀 없는 dfs 구현
+def is_binary_graph(init, status, adjacent_list):
     stack = list()
-    stack.append(i)
-    status[i] = S1_VISITED
+    stack.append(init)
+    status[init] = S1_VISITED
 
     while stack:
         x = stack[-1]
+        is_pushed = False
 
-        nomi_list = list()
         for v in adjacent_list[x]:
             if status[v] == status[x]:
                 return False
-            
-            if status[v] == NOT_VISITED:
-                nomi_list.append(v)
 
-        if nomi_list:
-            status[nomi_list[0]] = S1_VISITED if status[x] == S2_VISITED else S2_VISITED
-            stack.append(nomi_list[0])
-        else:
+            if status[v] == NOT_VISITED:
+                status[v] = S1_VISITED if status[x] == S2_VISITED else S2_VISITED
+                stack.append(v)
+                is_pushed = True
+                break
+
+        if not is_pushed:
             stack.pop(-1)
-    
+
     return True
+
 
 '''
 이분 그래프:
@@ -41,12 +50,14 @@ def is_binary_graph(V, i, status, adjacent_list):
 
 search_whole_graph()에서 각 부분 그래프들을 DFS한다.
 '''
+
+
 def search_whole_graph(V, adjacent_list):
     status = [NOT_VISITED for _ in range(V)]
     for i in range(V):
         if status[i] == NOT_VISITED:
-            result = is_binary_graph(V, i, status, adjacent_list)
-            if result == False:
+            result = is_binary_graph(i, status, adjacent_list)
+            if not result:
                 return 'NO'
     return 'YES'
 
