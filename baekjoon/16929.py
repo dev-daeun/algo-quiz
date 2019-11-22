@@ -55,8 +55,8 @@ def get_answer():
             if not visited[i][j]:
                 result = dfs(i, j)
                 if result:
-                    return 'YES'
-    return 'NO'
+                    return 'Yes'
+    return 'No'
 
 
 print(get_answer())
