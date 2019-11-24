@@ -13,6 +13,7 @@ class Node:
         self.deleted = False
 
 
+# 어떤 노드를 삭제할 때 그 노드의 자손 노드들까지 재귀적으로 deleted = True 처리한다.
 def delete_node(node):
     node.deleted = True
     if not node.children:
@@ -22,6 +23,7 @@ def delete_node(node):
         delete_node(child)
 
 
+# 자식이 아예 없거나 자식이 있을 때 모두 deleted = True 처리된 경우 그 노드는 leaf 노드에 해당한다.
 def is_leaf(node):
     if not node.children:
         return True
