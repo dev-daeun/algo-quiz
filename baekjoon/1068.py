@@ -22,6 +22,16 @@ def delete_node(node):
         delete_node(child)
 
 
+def is_leaf(node):
+    if not node.children:
+        return True
+
+    for child in node.children:
+        if not child.deleted:
+            return False
+    return True
+
+
 def get_answer():
     nodes = [Node(i) for i in range(N)]
     
@@ -34,7 +44,7 @@ def get_answer():
 
     num_of_leaf = 0
     for i in range(N):
-        if not nodes[i].deleted and not nodes[i].children:
+        if not nodes[i].deleted and is_leaf(nodes[i]):
             num_of_leaf += 1
     
     return num_of_leaf
