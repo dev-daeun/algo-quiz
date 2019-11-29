@@ -1,21 +1,19 @@
-from copy import deepcopy
 from sys import stdin
-
-
-# path: N부터 정점 V까지 이동하는 경로.
-# path 의 길이 = 이동하는 데 걸린 시간(초 단위)
-class Vertex:
-    def __init__(self, val):
-        self.val = val
-        self.path = []
 
 
 N, K = list(map(int, stdin.readline().split()))
 
 MAX_AMOUNT = 100000
-vertexes = list()
-for i in range(MAX_AMOUNT+1):
-    vertexes.append(Vertex(i))
+
+'''
+방문했던 정점들을 출력하려면 종착점인 K에서부터 역추적이 필요함.
+prev[i]: i번째 정점 이전에 방문했던 정점을 기록할 용도.
+
+1. 어떤 정점을 방문할 때마다 그 정점을 기준으로 이전에 방문했던 정점을 기록한다.
+2. 스택을 이용하여 K번째 정점부터 N까지의 역순으로 방문했던 정점을 출력한다.
+'''
+prev = [i for i in range(MAX_AMOUNT + 1)]
+visited = [False for _ in range(MAX_AMOUNT + 1)]
 
 
 def adjacent_list(v):
@@ -29,26 +27,33 @@ def adjacent_list(v):
 def bfs():
     queue = list()
     queue.append(N)
-    vertexes[N].path.append(N)
+    visited[N] = True
 
     while queue:
         x = queue.pop(0)
+        if x == K:
+            return
         for next_v in adjacent_list(x):
             if 0 <= next_v <= MAX_AMOUNT:
-                if not vertexes[next_v].path or len(vertexes[x].path) + 1 < len(vertexes[next_v].path):
-                    vertexes[next_v].path = deepcopy(vertexes[x].path)
-                    vertexes[next_v].path.append(next_v)
+                if not visited[next_v]:
+                    visited[next_v] = True
                     queue.append(next_v)
-                if next_v == K:
-                    return vertexes[next_v].path
-
-    return vertexes[K].path
+                    prev[next_v] = x
 
 
-def get_answer():
-    result = bfs()
-    print(len(result) - 1)
-    print(' '.join([str(r) for r in result]))
+def print_answer():
+    bfs()
+
+    stack = list()
+    stack.append(K)
+
+    x = stack[-1]
+    while x != prev[x]:
+        stack.append(prev[x])
+        x = prev[x]
+
+    print(len(stack) - 1)
+    print(' '.join(str(r) for r in reversed(stack)))
 
 
-get_answer()
+print_answer()
