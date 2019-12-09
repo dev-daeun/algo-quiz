@@ -8,16 +8,19 @@ for _ in range(R):
     cell.append(list(stdin.readline().strip('\n')))
 
 '''
-푸는 데 걸린 시간: 3시간
+푸는 데 걸린 시간: 3시간.........
 
 * 푸는 데 시간이 오래 걸린 원인 *
-    1. max() 내장함수에 재귀호출되는 함수를 넘겨줘서 의도한대로 동작하지 않음.
+    max() 내장함수 파라미터로 재귀호출되는 함수의 결과를 넘겨줘서 의도한대로 동작하지 않음.....왜죠...
 
 * 시간 초과 원인 *
-    1. visited 컬렉션을 (알파벳 문자: False) 형태의 해시테이블로 만들었음.
+    1. visited_alphabets 컬렉션을 (알파벳 문자: False) 형태의 해시테이블로 만들었음.
     2. (ASCII 코드 - 65) 인덱스로 접근하는 리스트로 바꾼 후 통과됨.
+
+* 배운 것 *
+    1. 재귀호출한 결과를 어떤 값과 비교하여 최소/최대값을 구할 때 max(), min()은 쓰지말자.
+    2. 컬렉션은 왠만하면 리스트(1차원 배열)로 구현하자.
 '''
-visited = [False for _ in range(26)]
 
 
 def adjacent_list(x, y):
@@ -32,21 +35,16 @@ def adjacent_list(x, y):
 answer = 1
 
 
-def get_answer(x, y, cnt):
+def get_answer(x, y, visited_alphabets):
     global answer
     for next_x, next_y in adjacent_list(x, y):
         if 0 <= next_x < R and 0 <= next_y < C:
-            if not visited[ord(cell[next_x][next_y]) - 65]:
-                visited[ord(cell[next_x][next_y]) - 65] = True
-                # 재귀호출하는 함수를 넣어서 그런지
-                # max(answer, get_answer(next_x, next_y, cnt + 1)) 으로 호출하면 의도하는 값이 안나옴.
-                result = get_answer(next_x, next_y, cnt + 1)
+            if cell[next_x][next_y] not in visited_alphabets:
+                result = get_answer(next_x, next_y, visited_alphabets + cell[next_x][next_y])
                 if result > answer:
                     answer = result
-                visited[ord(cell[next_x][next_y]) - 65] = False
-    return cnt
+    return len(visited_alphabets)
 
 
-visited[ord(cell[0][0]) - 65] = True
-get_answer(0, 0, 1)
+get_answer(0, 0, visited_alphabets=cell[0][0])
 print(answer)
