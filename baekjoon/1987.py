@@ -1,6 +1,5 @@
-from sys import stdin, setrecursionlimit
+from sys import stdin
 
-setrecursionlimit(30000)
 
 R, C = list(map(int, stdin.readline().split()))
 
@@ -31,11 +30,13 @@ def get_answer(x, y, cnt):
         if 0 <= next_x < R and 0 <= next_y < C:
             if not visited[cell[next_x][next_y]]:
                 visited[cell[next_x][next_y]] = True
-                answer = max(answer, get_answer(next_x, next_y, cnt + 1))
+                result = get_answer(next_x, next_y, cnt + 1)
+                if result > answer:
+                    answer = result
                 visited[cell[next_x][next_y]] = False
-
     return cnt
 
 
+visited[cell[0][0]] = True
 get_answer(0, 0, 1)
 print(answer)
