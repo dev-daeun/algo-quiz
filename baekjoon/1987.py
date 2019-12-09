@@ -5,21 +5,12 @@ setrecursionlimit(30000)
 R, C = list(map(int, stdin.readline().split()))
 
 cell = list()
-visited = list()
 for _ in range(R):
     cell.append(list(stdin.readline().strip('\n')))
-    visited.append([False for _ in range(R)])
 
 
-class Alphabets:
-    def __init__(self, chars, additional=None):
-        self.chars = chars
-        if additional:
-            self.chars += additional
-
-
-def is_promising(x, y, visited_alphabets):
-    return cell[x][y] not in visited_alphabets.chars
+alphabets = [chr(i) for i in range(65, 91)]
+visited = {alpha: False for alpha in alphabets}
 
 
 def adjacent_list(x, y):
@@ -31,19 +22,20 @@ def adjacent_list(x, y):
     )
 
 
-answer = 0
+answer = 1
 
 
-def get_answer(x, y, visited_alphabets):
+def get_answer(x, y, cnt):
     global answer
-    if 0 <= x < R and 0 <= y < C:
-        if is_promising(x, y, visited_alphabets):
-            for next_x, next_y in adjacent_list(x, y):
-                print(f'x: {next_x}, y:{next_y} ', id(visited_alphabets.chars))
-                answer = max(answer, get_answer(next_x, next_y, Alphabets(visited_alphabets.chars, additional=cell[x][y])))
+    for next_x, next_y in adjacent_list(x, y):
+        if 0 <= next_x < R and 0 <= next_y < C:
+            if not visited[cell[next_x][next_y]]:
+                visited[cell[next_x][next_y]] = True
+                answer = max(answer, get_answer(next_x, next_y, cnt + 1))
+                visited[cell[next_x][next_y]] = False
 
-    return len(visited_alphabets.chars)
+    return cnt
 
 
-get_answer(0, 0, Alphabets(''))
+get_answer(0, 0, 1)
 print(answer)
