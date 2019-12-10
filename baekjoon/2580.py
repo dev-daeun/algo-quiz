@@ -40,6 +40,7 @@ def answer(idx, result):
     x, y = empty_cells[idx]
     for i in range(1, 10):
         if (i not in garo(x, y)) and (i not in sero(x, y)) and (i not in sagak(x, y)):
+            cells[x][y] = i
             answer(idx + 1, result + str(i))
 
 answer(0, '')
