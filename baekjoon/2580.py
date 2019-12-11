@@ -1,4 +1,4 @@
-from sys import stdin
+from sys import stdin, exit
 
 cells = list()
 for _ in range(9):
@@ -7,43 +7,51 @@ for _ in range(9):
 
 empty_cells = list()
 for i in range(9):
-     for j in range(9):
+    for j in range(9):
         if cells[i][j] == 0:
             empty_cells.append((i, j))
 
 
-def garo(x, y):
-    return [cells[x][j] for j in range(9)]
+def garo(x, i):
+    for yy in range(9):
+        if cells[x][yy] == i:
+            return False
+    return True
 
 
-def sero(x, y):
-    return [cells[i][y] for i in range(9)]
+def sero(y, i):
+    for xx in range(9):
+        if cells[xx][y] == i:
+            return False
+    return True
 
 
-def sagak(x, y):
-    result = list()
-    for i in range(3 *(x//3), 3*(x//3) + 3):
-        for j in range(3*(y//3), 3*(y//3) + 3):
-            if i != x or j != y:
-                result.append(cells[i][j])
-    return result
+def sagak(x, y, i):
+    start_x = 3 * (x // 3)
+    start_y = 3 * (y // 3)
+
+    for xx in range(start_x, start_x + 3):
+        for yy in range(start_y, start_y + 3):
+            if cells[xx][yy] == i:
+                return False
+
+    return True
 
 
-def answer(idx, result):
-    if len(result) == len(empty_cells):
-        for r, corp in zip(result, empty_cells):
-            r = int(r)
-            x, y = corp
-            cells[x][y] = r
-        return
+def answer(idx):
+    if idx == len(empty_cells):
+        for i in range(9):
+            for j in range(9):
+                print(cells[i][j], end=' ')
+            print()
+        exit(0)
 
     x, y = empty_cells[idx]
     for i in range(1, 10):
-        if (i not in garo(x, y)) and (i not in sero(x, y)) and (i not in sagak(x, y)):
+        if garo(x, i) and sero(y, i) and sagak(x, y, i):
             cells[x][y] = i
-            answer(idx + 1, result + str(i))
+            answer(idx + 1)
+            cells[x][y] = 0
 
-answer(0, '')
-for row in cells:
-    print(' '.join(str(e) for e in row))
 
+answer(0)
