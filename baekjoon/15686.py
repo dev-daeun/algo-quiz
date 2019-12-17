@@ -37,15 +37,16 @@ def get_chicken_dist(init_x, init_y):
 
     while queue:
         x, y = queue.pop(0)
+        answer = maxsize
         for next_x, next_y in adjacent_list(x, y):
             if 0 <= next_x < N and 0 <= next_y < N:
                 if not visited[next_x][next_y]:
                     visited[next_x][next_y] = True
                     if cells[next_x][next_y] == CHICK:
-                        print(f'init: {init_x}, {init_y}')
-                        print(get_dist(init_x, init_y, next_x, next_y))
-                        return get_dist(init_x, init_y, next_x, next_y)
+                        answer = min(answer, get_dist(init_x, init_y, next_x, next_y))
                     queue.append((next_x, next_y))
+        if answer != maxsize:
+            return answer
 
     return get_dist(init_x, init_y, x, y)
 
