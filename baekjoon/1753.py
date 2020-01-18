@@ -1,10 +1,14 @@
-from sys import stdin, maxsize
+from heapq import heapify, heappop
+from sys import stdin
 
 
 class Vertex:
     def __init__(self, number):
         self.number = number
-        self.dist = maxsize
+        self.dist = 11
+
+    def __lt__(self, other):
+        return self.dist < other.dist
 
 
 def relax(v, adj_v, w, vertices):
@@ -21,8 +25,8 @@ def dijkstra(start, adjacent_list, n):
         q.append(vertices[i])
 
     while q:
-        q = sorted(q, key=lambda x: x.dist)
-        v = q.pop(0)
+        heapify(q)
+        v = heappop(q)
 
         for adj_v, adj_w in adjacent_list[v.number]:
             relax(v.number, adj_v, adj_w, vertices)
@@ -49,4 +53,4 @@ if __name__ == '__main__':
     vertices = dijkstra(start, adjacent_list, n)
 
     for v in vertices:
-        print('INF') if v.dist == maxsize else print(v.dist)
+        print('INF') if v.dist == 11 else print(v.dist)
