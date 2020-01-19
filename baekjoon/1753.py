@@ -27,7 +27,7 @@ def dijkstra(start, adjacent_list, n):
     return dist
 
 
-INF = 11
+INF = maxsize
 
 n, m = list(map(int, stdin.readline().split()))
 start = int(stdin.readline().strip('\n'))
