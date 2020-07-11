@@ -5,9 +5,9 @@
 # The idea would be to have one pointer for iterating the array and another pointer that just works on the non-zero elements of the array.
 
 '''
-: 배열 내 0을 세는 용도.
+count_zero: 배열 내 0을 세는 용도.
 
-배열을 순회하면서 nums[i]가 0일 경우 cnt_zero를 증가시킨다.
+배열을 순회하면서 nums[i]가 0일 경우 count_zero 증가시킨다.
 nums[i]가 0이 아닐 경우 nums[i - count_zero] 를 nums[i]로 바꾸고, nums[i]는 0으로 바꾼다.
 
 예)
