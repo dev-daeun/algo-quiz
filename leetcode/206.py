@@ -44,3 +44,17 @@ class Solution:
             cur = tmp
 
         return prev
+
+
+'''
+포인터 2개를 이용한 솔루션
+'''
+class SolutionWith2pointer:
+    def reverseList(self, head):
+        prev = None
+        while head:
+            curr = head
+            head = head.next
+            curr.next = prev
+            prev = curr
+        return prev
