@@ -23,6 +23,11 @@ def reorderLogFiles1(logs: List[str]) -> List[str]:
 
     return char_logs + num_logs
 
+    # 시간복잡도
+    # char_logs, num_logs 만드는 시간복잡도 = O(n)
+    # char_logs 정렬하는 시간복잡도 = Timsort 시간복잡도 = O(nlogn)
+    # 총 시간복잡도 = O(n) + O(nlogn) = O(nlogn)
+
 
 """
 풀이 2. lambda, <str>.isdigit() 사용
